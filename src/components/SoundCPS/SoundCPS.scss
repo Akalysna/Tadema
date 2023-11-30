@@ -1,0 +1,24 @@
+.sound-cps {
+
+    position: fixed;
+    z-index: 1000;
+
+    right: 2em;
+    bottom: 2em;
+    
+    svg {
+        height: 2em;
+        width: 2em;
+        
+        path{
+            
+            stroke: white;
+            stroke-width: 1.5px;
+        }
+    }
+
+    &:hover{
+        cursor: pointer;
+    }
+
+}

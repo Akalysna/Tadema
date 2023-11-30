@@ -1,0 +1,33 @@
+$main-color: #93ad24;
+
+#coffee-sidebar {
+
+    overflow: visible;
+        position: fixed;
+        right: 3em;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 9;
+
+
+        .sidebar {
+
+            cursor: pointer;
+    
+            &-fill {
+                fill: $main-color;
+                stroke: none;
+                stroke-width: none;
+            }
+            
+            &-stroke {
+                --side-color: white;
+                
+                fill: transparent;
+                stroke: var(--side-color);
+                stroke-width: 2px;
+            }
+        }
+
+}
+

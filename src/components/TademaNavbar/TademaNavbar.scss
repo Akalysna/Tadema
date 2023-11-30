@@ -1,0 +1,49 @@
+$main-color: #93ad24;
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+    width: 100%;
+    padding: 0.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        position: absolute;
+        left: 0;
+        float: left;
+        transform: scale(0.7);
+    }
+
+    ul {
+        position: relative;
+        z-index: 8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        list-style: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+
+        gap: 2em;
+
+        li {
+            font-size: 1.2em;
+            padding: 0.5em;
+            a {
+                color: #1b2002;
+                text-decoration: none;
+
+                &:hover {
+                    color: $main-color;
+                }
+            }
+        }
+    }
+} // nav
