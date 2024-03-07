@@ -36,11 +36,13 @@
     }
 
     section {
+
         position: relative;
         height: 100vh;
         z-index: 1;
 
         &#top {
+            
             overflow: hidden;
 
             display: flex;
