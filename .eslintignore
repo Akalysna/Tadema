@@ -4,3 +4,5 @@ node_modules/
 dist/
 build/
 out/
+
+src/pages/Coffee/Coffee.tsx
