@@ -5,21 +5,21 @@
   "dependencies": {
     "@react-three/drei": "^9.88.4",
     "@react-three/fiber": "^8.14.6",
+    "@studio-freight/react-lenis": "^0.0.36",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "gsap": "^3.12.2",
-    "react-howler": "^5.2.0",
-    "@studio-freight/react-lenis": "^0.0.36",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.66",
     "@types/react": "^18.2.39",
     "@types/react-dom": "^18.2.17",
+    "gsap": "^3.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-howler": "^5.2.0",
+    "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "sass": "^1.69.5",
-    "react-router-dom": "^6.16.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint src/*"
   },
   "eslintConfig": {
     "extends": [
@@ -48,9 +49,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.23.10",
     "@types/howler": "^2.2.10",
     "@types/react-howler": "^5.2.2",
     "@types/react-lottie": "^1.2.6",
-    "@types/three": "^0.157.2"
+    "@types/three": "^0.157.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

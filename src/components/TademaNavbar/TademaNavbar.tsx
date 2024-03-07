@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { ReactComponent as TademaLogo } from '../../assets/svg/tadema_logo.svg'
 
 import './TademaNavbar.scss';
@@ -8,7 +8,7 @@ const TademaNavbar = () => {
     const ref = useRef(null)
 
     /**Ajout de glassmorphisme à la navbar si le scroll dépasse une certaine limite */
-    document.addEventListener('scroll', function (event) {
+    document.addEventListener('scroll', () => {
 
         if (!ref.current)
             return

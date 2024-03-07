@@ -27,7 +27,7 @@ const Coffee = () => {
     const [soundsPath, setSoundsPath] = useState<NodeListOf<SVGPathElement>>(null)
 
 
-    let sidebarSeeds: Array<HTMLElement> = []
+    const sidebarSeeds: Array<HTMLElement> = []
     // let pathLenght: number
     // let path: SVGPathElement
     // let soundCps: NodeListOf<HTMLElement>
