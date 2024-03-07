@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7cd80f57.css",
+    "main.js": "/static/js/main.cde93894.js",
+    "static/media/nathan-dumlao-zUNs99PGDg0-unsplash_medium.jpg": "/static/media/nathan-dumlao-zUNs99PGDg0-unsplash_medium.863e645bb87c27ef1ea0.jpg",
+    "static/media/pexels-pixabay-459270_large.jpg": "/static/media/pexels-pixabay-459270_large.5e9d09d4c02e07a1af3d.jpg",
+    "static/media/Barlow-Light.ttf": "/static/media/Barlow-Light.7e0099c5266078997e2c.ttf",
+    "static/media/Bagrile.otf": "/static/media/Bagrile.80edbf60db499703ae65.otf",
+    "static/media/Sweety.ttf": "/static/media/Sweety.7e820364a71bf5e60395.ttf",
+    "static/media/tadema_logo.svg": "/static/media/tadema_logo.7ead40d997b7124fab99677d665b86a4.svg",
+    "static/media/coffee-sidebar.svg": "/static/media/coffee-sidebar.62d8b6cf0c3cc0af7b824e1c2c962900.svg",
+    "static/media/volume.svg": "/static/media/volume.f204aec27892af948f8188104f86cdcb.svg",
+    "static/media/volume-off.svg": "/static/media/volume-off.3cb99aea07d2845ba405ad36fafd04f9.svg",
+    "static/media/coffee_path.svg": "/static/media/coffee_path.b9e3ba62c2981fc06a2e5ddc69d9e44a.svg",
+    "index.html": "/index.html",
+    "main.7cd80f57.css.map": "/static/css/main.7cd80f57.css.map",
+    "main.cde93894.js.map": "/static/js/main.cde93894.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7cd80f57.css",
+    "static/js/main.cde93894.js"
+  ]
+}
