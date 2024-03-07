@@ -1,0 +1,30 @@
+name: Build And Deploy
+on : 
+  push: 
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
+      with: 
+        node-version: 16.x
+
+    - name: Install
+      run: npm i
+
+    - name: Test
+      run: npm run test
+
+    - name: ES Lint
+      run: npm run lint
+
+    - name: Build
+      run: npm run build
