@@ -1,9 +1,20 @@
 name: Create Release
 on: 
-  push:
-    branches: main
-  pull_request:
-    branches: main
+  workflow_dispatch: 
+    inputs:
+      type:
+        description: 'NPM Version type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+      tag:
+        description: 'Numéro de version'
+        required: false
+        type: number
 
 jobs: 
   release: 
@@ -16,6 +27,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 16.x
+
+      - name: NPM version
+        run: npm version ${{ inputs.type }}
+
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
 
       - name: Get package version
         id: get_version
