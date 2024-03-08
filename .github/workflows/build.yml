@@ -33,17 +33,10 @@ jobs:
 
     - name: Build
       run: npm run build
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: production-files
-        path: ./build
-        if-no-files-found: error
         
   release:
     needs: ci 
-    if: ${{inputs.type}} != ""
+    if: ${{inputs.type != ""}} 
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -77,20 +70,3 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
-        
-  deploy: 
-    needs: [ci]
-    runs-on: ubuntu-latest
-    steps: 
-    
-    - name: Download artefact
-      uses: actions/download-artifact@v4
-      with:
-        name: production-files
-        path: ./build
-    
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.CI_CD_TOKEN }}
-        publish_dir: ./build
