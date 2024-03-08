@@ -36,7 +36,7 @@ jobs:
         
   release:
     needs: ci 
-    if: ${{inputs.type != ""}} 
+    if: github.event.inputs.type != ''
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
