@@ -4,9 +4,14 @@ on :
     branches: main
   pull_request:
     branches: main
+  workflow_dispatch: 
+    inputs:
+      type:
+        description: 'NPM Version type'
+        type: string
 
 jobs:
-  build: 
+  ci: 
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -36,8 +41,45 @@ jobs:
         path: ./build
         if-no-files-found: error
         
+  release:
+    needs: ci 
+    if: ${{inputs.type}} != ""
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
+      with: 
+        node-version: 16.x
+        
+    - name: NPM version
+      run: | 
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        npm version ${{ inputs.type }}
+
+    - name : Push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        
+    - name: Get package version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")
+
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: v${{ steps.get_version.outputs.VERSION }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: false
+        prerelease: false
+        
   deploy: 
-    needs: [build]
+    needs: [ci]
     runs-on: ubuntu-latest
     steps: 
     
