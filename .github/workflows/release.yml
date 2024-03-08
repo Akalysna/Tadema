@@ -11,10 +11,6 @@ on:
         - patch
         - minor
         - major
-      tag:
-        description: 'Numéro de version'
-        required: false
-        type: number
 
 jobs: 
   release: 
@@ -29,15 +25,19 @@ jobs:
           node-version: 16.x
 
       - name: NPM version
+        env:
+          EMAIL: llona.andre26@gmail.com
+          NAME: Akalysna
         run: | 
-          git config user.email "llona.andre26@gmail.com"
-          git config user.name "Akalysna"
+          git config user.email $EMAIL
+          git config user.name $NAME
           npm version ${{ inputs.type }}
-
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          delete-branch: true
           branch: main
 
       - name: Get package version
