@@ -1,4 +1,4 @@
-name: Create Release
+name: Create Tag
 on: 
   workflow_dispatch: 
     inputs:
@@ -13,7 +13,7 @@ on:
         - major
 
 jobs: 
-  release: 
+  create-tag: 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -38,19 +38,3 @@ jobs:
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-branch: true
-
-      - name: Get package version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
-          body: Release ${{ steps.get_version.outputs.VERSION }}
-          draft: false
-          prerelease: false
