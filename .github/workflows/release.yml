@@ -38,7 +38,6 @@ jobs:
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           delete-branch: true
-          branch: main
 
       - name: Get package version
         id: get_version
