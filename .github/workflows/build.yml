@@ -59,6 +59,8 @@ jobs:
         branch: create-pull-request/patch
 
     - name: Merge
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: gh pr merge --auto --delete-branch --squash "create-pull-request/patch"
         
     - name: Get package version
