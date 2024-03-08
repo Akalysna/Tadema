@@ -6,7 +6,7 @@ on:
 
 jobs: 
   release: 
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'create-pull-request'
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'create-pull-request/patch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
