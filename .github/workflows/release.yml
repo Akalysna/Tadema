@@ -29,7 +29,10 @@ jobs:
           node-version: 16.x
 
       - name: NPM version
-        run: npm version ${{ inputs.type }}
+        run: | 
+          git config user.email "llona.andre26@gmail.com"
+          git config user.name "Akalysna"
+          npm version ${{ inputs.type }}
 
       - name: Push
         uses: ad-m/github-push-action@master
