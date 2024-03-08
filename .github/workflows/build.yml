@@ -4,9 +4,14 @@ on :
     branches: main
   pull_request:
     branches: main
+  workflow_dispatch: 
+    inputs:
+      type:
+        description: 'NPM Version type'
+        type: string
 
 jobs:
-  build: 
+  ci: 
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -28,27 +33,40 @@ jobs:
 
     - name: Build
       run: npm run build
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: production-files
-        path: ./build
-        if-no-files-found: error
         
-  deploy: 
-    needs: [build]
+  release:
+    needs: ci 
+    if: github.event.inputs.type != ''
     runs-on: ubuntu-latest
     steps: 
-    
-    - name: Download artefact
-      uses: actions/download-artifact@v4
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
+      with: 
+        node-version: 16.x
+        
+    - name: NPM version
+      run: | 
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        npm version ${{ inputs.type }}
+
+    - name : Push
+      uses: ad-m/github-push-action@master
       with:
-        name: production-files
-        path: ./build
-    
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+        
+    - name: Get package version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")
+
+    - name: Create release
+      uses: ncipollo/release-action@v1
       with:
-        github_token: ${{ secrets.CI_CD_TOKEN }}
-        publish_dir: ./build
+        tag: v${{ steps.get_version.outputs.VERSION }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: false
+        prerelease: false
