@@ -10,6 +10,7 @@ on :
 
 jobs:
   ci: 
+    if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -46,31 +47,31 @@ jobs:
         node-version: 16.x
         
     - name: NPM version
+      id: version
       run: | 
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        npm version ${{ inputs.type }}
+        VERSION=`npm version ${{ inputs.type }}`
+        echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v6
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         delete-branch: true
-        branch: create-pull-request/patch
+        title: Release ${{ steps.version.outputs.VERSION }}
+        branch: release/${{ steps.version.outputs.VERSION }}
+        labels: release
 
     - name: Merge
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh pr merge --auto --delete-branch --squash "create-pull-request/patch"
-        
-    - name: Get package version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")
-
+      run: gh pr merge --auto --delete-branch --squash "release/${{ steps.version.outputs.VERSION }}"
+ 
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ steps.get_version.outputs.VERSION }}
+        tag: ${{ steps.version.outputs.VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
