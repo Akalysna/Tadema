@@ -58,10 +58,10 @@ jobs:
     - name: Build and tag image
       run: |
         COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7) 
-        docker build -t ${REPOSITORY}:$COMMIT_SHA .
+        docker build -t ${{env.REPOSITORY}}:$COMMIT_SHA .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${REPOSITORY_OWNER}/${REPOSITORY}:$COMMIT_SHA
+      run: docker push ghcr.io/${{env.REPOSITORY_OWNER}}/${{env.REPOSITORY}}:$COMMIT_SHA
   
   release:
     needs: ci 
