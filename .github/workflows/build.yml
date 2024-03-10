@@ -10,8 +10,7 @@ on :
 
 jobs:
   ci: 
-    #if: ${{ github.event.label.name != 'release' }}
-    if: false
+    if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -35,7 +34,7 @@ jobs:
       run: npm run build
 
   cd: 
-    #needs: ci
+    needs: ci
     runs-on: ubuntu-latest
     steps:
 
