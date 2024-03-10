@@ -1,7 +1,5 @@
 name: Build And Deploy
 on : 
-  push: 
-    branches: main
   pull_request:
     branches: main
   workflow_dispatch: 
@@ -12,6 +10,7 @@ on :
 
 jobs:
   ci: 
+    if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -33,7 +32,35 @@ jobs:
 
     - name: Build
       run: npm run build
+
+  cd: 
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
+      with: 
+        node-version: 16.x
         
+    - name: Login to ghcr.io
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    #Récupération du SHA du commit pour nommer la version de l'image
+    - name: Build and tag image
+      run: |
+        COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+        REPOSITORY=${GITHUB_REPOSITORY,,}
+        echo "COMMIT_SHA=$COMMIT_SHA" >> ${GITHUB_ENV}
+        echo "REPOSITORY=$REPOSITORY" >> ${GITHUB_ENV}
+        docker build -t ghcr.io/$REPOSITORY:$COMMIT_SHA .
+
+    - name: Push image to GHCR
+      run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
+  
   release:
     needs: ci 
     if: github.event.inputs.type != ''
@@ -48,25 +75,31 @@ jobs:
         node-version: 16.x
         
     - name: NPM version
+      id: version
       run: | 
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        npm version ${{ inputs.type }}
+        VERSION=`npm version ${{ inputs.type }}`
+        echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
-    - name : Push
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-        
-    - name: Get package version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(node -e "console.log(require('./package.json').version)")
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        delete-branch: true
+        title: Release ${{ steps.version.outputs.VERSION }}
+        branch: release/${{ steps.version.outputs.VERSION }}
+        labels: release
 
+    - name: Merge
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh pr merge --auto --delete-branch --squash "release/${{ steps.version.outputs.VERSION }}"
+ 
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
-        tag: v${{ steps.get_version.outputs.VERSION }}
+        tag: ${{ steps.version.outputs.VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
