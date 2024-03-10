@@ -1,6 +1,7 @@
 {
   "name": "tadema",
   "version": "0.1.5",
+  "homepage": "https://akalysna.github.io/tadema",
   "private": true,
   "dependencies": {
     "@react-three/drei": "^9.88.4",
@@ -24,6 +25,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -56,6 +59,7 @@
     "@types/three": "^0.157.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.0",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.1.1"
   }
 }
