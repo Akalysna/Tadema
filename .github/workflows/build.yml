@@ -32,7 +32,32 @@ jobs:
 
     - name: Build
       run: npm run build
+
+  cd: 
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
+      with: 
+        node-version: 16.x
         
+    - name: Login to ghcr.io
+      run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    #Récupération du SHA du commit pour nommer la version de l'image
+    - name: Build and tag image
+      run: |
+        COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7) 
+        docker build -t ${{ github.repository }}:$COMMIT_SHA .
+
+    - name: Push image to GHCR
+      run: docker push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$COMMIT_SHA
+  
   release:
     needs: ci 
     if: github.event.inputs.type != ''
