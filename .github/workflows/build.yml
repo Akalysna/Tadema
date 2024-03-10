@@ -50,19 +50,16 @@ jobs:
     - name: Login to ghcr.io
       run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: downcase REPO
-      run: |
-        echo "REPOSITORY=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
-        echo "REPOSITORY_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> ${GITHUB_ENV}
-        
     #Récupération du SHA du commit pour nommer la version de l'image
     - name: Build and tag image
       run: |
-        COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7) 
+        COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+        echo "COMMIT_SHA=$COMMIT_SHA" >> ${GITHUB_ENV}
+        echo "REPOSITORY=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
         docker build -t ${{env.REPOSITORY}}:$COMMIT_SHA .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${{env.REPOSITORY}}:$COMMIT_SHA
+      run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
   
   release:
     needs: ci 
