@@ -57,7 +57,7 @@ jobs:
         REPOSITORY=${GITHUB_REPOSITORY,,}
         echo "COMMIT_SHA=$COMMIT_SHA" >> ${GITHUB_ENV}
         echo "REPOSITORY=$REPOSITORY" >> ${GITHUB_ENV}
-        docker build -t $REPOSITORY:$COMMIT_SHA .
+        docker build -t ghcr.io/$REPOSITORY:$COMMIT_SHA .
 
     - name: Push image to GHCR
       run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
