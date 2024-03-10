@@ -1,7 +1,7 @@
 {
   "name": "tadema",
   "version": "0.1.5",
-  "homepage": "https://akalysna.github.io/tadema",
+  "homepage": "https://akalysna.github.io/Tadema",
   "private": true,
   "dependencies": {
     "@react-three/drei": "^9.88.4",
