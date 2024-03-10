@@ -10,7 +10,8 @@ on :
 
 jobs:
   ci: 
-    if: ${{ github.event.label.name != 'release' }}
+    #if: ${{ github.event.label.name != 'release' }}
+    if: false
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -34,7 +35,7 @@ jobs:
       run: npm run build
 
   cd: 
-    needs: ci
+    #needs: ci
     runs-on: ubuntu-latest
     steps:
 
@@ -61,7 +62,7 @@ jobs:
         docker build -t ${{env.REPOSITORY}}:$COMMIT_SHA .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${{env.REPOSITORY_OWNER}}/${{env.REPOSITORY}}:$COMMIT_SHA
+      run: docker push ghcr.io/${{env.REPOSITORY}}:$COMMIT_SHA
   
   release:
     needs: ci 
