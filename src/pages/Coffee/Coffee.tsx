@@ -21,6 +21,7 @@ const Coffee = () => {
     const soundCpsRef = useRef<HTMLElement>(null)
     const btnGammeRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef<HTMLDivElement>(null)
+    
 
     const [path, setPath] = useState<SVGPathElement>(null)
     const [pathLenght, setPathLengt] = useState<number>(0)
