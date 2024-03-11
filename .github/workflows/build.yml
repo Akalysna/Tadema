@@ -22,7 +22,7 @@ jobs:
     steps: 
 
     - name: Composite
-      uses: akalysna/tadema/.github/workflows/reusable-workflow.yml@main
+      uses: akalysna/tadema/.github/workflows/ckeckout-install-node.yml@main
       with: 
         node-version: 18.x
 
