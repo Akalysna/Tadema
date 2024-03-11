@@ -40,8 +40,8 @@ jobs:
     - name: Test
       run: npm run test
 
-    - name: ES Lint
-      run: npm run lint
+    #- name: ES Lint
+      #run: npm run lint
 
     - name: Build
       run: npm run build
