@@ -10,7 +10,6 @@ on :
       deploy:
         description: "Lancer le déploiement" 
         type: boolean
-        default: false
       package: 
         description: "Construire une image"
         type: boolean
@@ -82,7 +81,7 @@ jobs:
       run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
 
   deployment:
-     if: github.event.inputs.deploy == true
+     if: github.event.inputs.deploy
      environment:
        name: github-pages
      runs-on: ubuntu-latest
