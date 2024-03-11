@@ -20,13 +20,11 @@ jobs:
     if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
-    - name: Checkout main branch
-      uses: actions/checkout@v4
-      
-    - name: Install NodeJs
-      uses: actions/setup-node@v4
+
+    - name: Composite
+      uses: akalysna/tadema/.github/workflows/reusable-workflow.yml@main
       with: 
-        node-version: 16.x
+        node-version: 18.x
 
     - name: Install
       run: npm i
