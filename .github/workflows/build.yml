@@ -20,9 +20,11 @@ jobs:
     if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
-
-    - name: Composite
-      uses: akalysna/tadema/.github/workflows/ckeckout-install-node.yml@main
+    - name: Checkout main branch
+      uses: actions/checkout@v4
+      
+    - name: Install NodeJs
+      uses: actions/setup-node@v4
       with: 
         node-version: 18.x
 
