@@ -13,14 +13,9 @@ on :
       package: 
         description: "Construire une image"
         type: boolean
-        default: false
-        
-permissions:
-  contents: read
-  pages: write
-  id-token: write
   
 jobs:
+
   ci: 
     if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
@@ -51,8 +46,10 @@ jobs:
         path: ./build
         name: github-pages
 
+
+
   cd: 
-    if: github.event.inputs.package == true
+    if: github.event.inputs.package == 'true'
     needs: ci
     runs-on: ubuntu-latest
     steps:
@@ -80,8 +77,14 @@ jobs:
     - name: Push image to GHCR
       run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
 
+
+
   deployment:
-     if: github.event.inputs.deploy
+     if: github.event.inputs.deploy == 'true'
+     permissions:
+      contents: read
+      pages: write
+      id-token: write
      environment:
        name: github-pages
      runs-on: ubuntu-latest
@@ -90,6 +93,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+
   
   release:
     needs: ci 
