@@ -1,6 +1,6 @@
 {
   "name": "tadema",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage": "https://akalysna.github.io/Tadema",
   "proxy": "http://localhost:5000",
   "private": true,
