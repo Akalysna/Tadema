@@ -1,4 +1,5 @@
 ![example workflow](https://github.com/akalysna/tadema/actions/workflows/build.yml/badge.svg?branch=main&event=push)
+[![deployed image](https://img.shields.io/badge/Deployed%20image-ok-brightgreen.svg?style=flat)](https://github.com/Akalysna/Tadema/pkgs/container/tadema)
 
 # Getting Started with Create React App
 
