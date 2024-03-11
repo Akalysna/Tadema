@@ -7,6 +7,12 @@ on :
       type:
         description: 'NPM Version type'
         type: string
+      deploy:
+        description: "Lancer le déploiement" 
+        type: boolean
+      package: 
+        description: "Construire une image"
+        type: boolean
 
 jobs:
   ci: 
@@ -34,6 +40,7 @@ jobs:
       run: npm run build
 
   cd: 
+    if: github.event.inputs.package
     needs: ci
     runs-on: ubuntu-latest
     steps:
@@ -60,6 +67,18 @@ jobs:
 
     - name: Push image to GHCR
       run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.COMMIT_SHA}}
+
+  deployment:
+     if: github.event.inputs.deploy
+     environment:
+       name: github-pages
+       url: ${{ steps.deployment.outputs.page_url }}
+     runs-on: ubuntu-latest
+     needs: ci
+     steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
   
   release:
     needs: ci 
