@@ -2,7 +2,6 @@
   "name": "tadema",
   "version": "0.1.6",
   "homepage": "https://akalysna.github.io/Tadema",
-  "proxy": "http://localhost:5000",
   "private": true,
   "dependencies": {
     "@react-three/drei": "^9.88.4",
@@ -22,6 +21,7 @@
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
     "sass": "^1.69.5",
+    "styled-components": "^6.1.8",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -35,10 +35,7 @@
     "lint": "npx eslint src/**/*.tsx"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": []
   },
   "browserslist": {
     "production": [

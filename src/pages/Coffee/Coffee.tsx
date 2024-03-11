@@ -9,6 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import TademaNavbar from '../../components/TademaNavbar/TademaNavbar';
 import CoffeeSidebar from '../../components/CoffeeSidebar/CoffeeSidebar';
 import SoundCps from '../../components/SoundCPS/SoundCPS';
+import SeedBar from '../../components/SeedBar/SeedBar';
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -25,7 +26,7 @@ const Coffee = () => {
 
     const [path, setPath] = useState<SVGPathElement>(null)
     const [pathLenght, setPathLengt] = useState<number>(0)
-    const [soundsPath, setSoundsPath] = useState<NodeListOf<SVGPathElement>>(null)
+    // const [soundsPath, setSoundsPath] = useState<NodeListOf<SVGPathElement>>(null)
 
 
     const sidebarSeeds: Array<HTMLElement> = []
@@ -43,7 +44,7 @@ const Coffee = () => {
         }
 
         setPath(coffeePathRef.current.childNodes.item(0) as SVGPathElement)
-        setSoundsPath(soundCpsRef.current.lastChild.firstChild.childNodes as NodeListOf<SVGPathElement>)
+        // setSoundsPath(soundCpsRef.current.lastChild.firstChild.childNodes as NodeListOf<SVGPathElement>)
 
         if (path) {
 
@@ -56,7 +57,7 @@ const Coffee = () => {
     })
 
 
-    document.addEventListener('scroll', function (event) {
+    document.addEventListener('scroll', () => {
 
         let scrollPercentage = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
         let drawLength = pathLenght * scrollPercentage * drawSpeedMultiplier;
@@ -64,10 +65,10 @@ const Coffee = () => {
         if (path)
             path.style.strokeDashoffset = (pathLenght - drawLength) + "";
 
-        if (soundsPath) {
-            let color = window.scrollY > 30 ? "black" : "white"
-            soundsPath.forEach((element) => { element.style.stroke = color })
-        }
+        // if (soundsPath) {
+        //     let color = window.scrollY > 30 ? "black" : "white"
+        //     soundsPath.forEach((element) => { element.style.stroke = color })
+        // }
 
         parallaxEffect()
         rotateFrame()
@@ -161,7 +162,7 @@ const Coffee = () => {
     }
 
     return (
-        <ReactLenis root>
+        
 
             <div className="coffee">
 
@@ -172,7 +173,7 @@ const Coffee = () => {
 
                 <TademaNavbar />
 
-                <CoffeeSidebar />
+                <SeedBar  position={[{start:0, end: 300}, {start:300, end: 580}, {start:580, end: 800}, {start:800, end: Number.MAX_VALUE}]}/>
 
                 <SoundCps innerRef={soundCpsRef} src={['assets/sounds/mixkit-birds-in-the-forest-1240.wav']} />
 
@@ -211,8 +212,6 @@ const Coffee = () => {
                 </section>
 
             </div>
-
-        </ReactLenis>
     );
 }
 
