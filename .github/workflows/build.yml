@@ -43,6 +43,11 @@ jobs:
 
     - name: Build
       run: npm run build
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        path: ./build
 
   cd: 
     if: github.event.inputs.package
