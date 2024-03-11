@@ -69,11 +69,15 @@ jobs:
       if: github.event.inputs.type != ''
       uses: actions-ecosystem/action-get-latest-tag@v1
       id: get-latest-tag
-        
+
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+  
       #Récupération du SHA du commit pour nommer la version de l'image
     - name: Build and tag image
       env: 
-       TAG: ${{ steps.get-latest-tag.outputs.tag }}
+       TAG: ${{ steps.package-version.outputs.current-version }}
       run: |
         COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
         REPOSITORY=${GITHUB_REPOSITORY,,}
@@ -82,7 +86,7 @@ jobs:
         docker build -t ghcr.io/$REPOSITORY:$TAG .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${{env.REPOSITORY}}:${{ steps.get-latest-tag.outputs.tag }}
+      run: docker push ghcr.io/${{env.REPOSITORY}}:${{ steps.package-version.outputs.current-version }}
 
 
 
