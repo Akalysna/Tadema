@@ -49,8 +49,8 @@ jobs:
 
 
   delivery: 
-    #if: github.event.inputs.package == 'true'
-    needs: ["ci", "release"]
+    if: github.event.inputs.package == 'true'
+    needs: ["ci"]
     runs-on: ubuntu-latest
     
     steps:
@@ -88,6 +88,9 @@ jobs:
       contents: read
       pages: write
       id-token: write
+
+     environment:
+       name: github-pages
       
      steps:
       - name: Deploy to GitHub Pages
