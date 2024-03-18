@@ -62,25 +62,25 @@ jobs:
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         VERSION=`npm version ${{ inputs.type }}`
-        echo "VERSION=$VERSION" >> ${GITHUB_ENV}
+        echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v6
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         delete-branch: true
-        title: Release ${{ env.VERSION }}
-        branch: release/${{ env.VERSION }}
+        title: Release ${{ steps.version.outputs.VERSION }}
+        branch: release/${{ steps.version.outputs.VERSION }}
 
     - name: Merge Pull Request
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh pr merge --auto --delete-branch --squash "release/${{ env.VERSION }}"
+      run: gh pr merge --auto --delete-branch --squash "release/${{ steps.version.outputs.VERSION }}"
  
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
-        tag: ${{ env.VERSION }}
+        tag: ${{ steps.version.outputs.VERSION }}
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: false
         prerelease: false
@@ -93,10 +93,10 @@ jobs:
       run: |
         REPOSITORY=${GITHUB_REPOSITORY,,}
         echo "REPOSITORY=$REPOSITORY" >> ${GITHUB_ENV}
-        docker build -t ghcr.io/$REPOSITORY:${{env.VERSION}} .
+        docker build -t ghcr.io/$REPOSITORY:${{steps.version.outputs.VERSION}} .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.VERSION}}
+      run: docker push ghcr.io/${{env.REPOSITORY}}:${{steps.version.outputs.VERSION}}
 
 
 
