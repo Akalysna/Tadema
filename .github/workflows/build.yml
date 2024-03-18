@@ -61,7 +61,7 @@ jobs:
       run: | 
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        VERSION=`npm version ${{ inputs.type }}`
+        VERSION=`npm version ${{ inputs.version }}`
         echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Create Pull Request
