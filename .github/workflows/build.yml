@@ -58,6 +58,7 @@ jobs:
         node-version: 18.x
         
     - name: Get Version
+      id: version
       run: | 
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
