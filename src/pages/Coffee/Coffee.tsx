@@ -10,6 +10,7 @@ import TademaNavbar from '../../components/TademaNavbar/TademaNavbar';
 import CoffeeSidebar from '../../components/CoffeeSidebar/CoffeeSidebar';
 import SoundCps from '../../components/SoundCPS/SoundCPS';
 import SeedBar from '../../components/SeedBar/SeedBar';
+import CoffeeLine from './CoffeeLine';
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -18,57 +19,13 @@ const Coffee = () => {
     const introSectionRef = useRef(null)
     const productSectionRef = useRef(null)
     const documentTitleRef = useRef(null)
-    const coffeePathRef = useRef<SVGSVGElement>(null)
     const soundCpsRef = useRef<HTMLElement>(null)
     const btnGammeRef = useRef<HTMLDivElement>(null)
     const rotateRef = useRef<HTMLDivElement>(null)
     
 
-    const [path, setPath] = useState<SVGPathElement>(null)
-    const [pathLenght, setPathLengt] = useState<number>(0)
-    // const [soundsPath, setSoundsPath] = useState<NodeListOf<SVGPathElement>>(null)
-
-
-    const sidebarSeeds: Array<HTMLElement> = []
-    // let pathLenght: number
-    // let path: SVGPathElement
-    // let soundCps: NodeListOf<HTMLElement>
-
-    let drawSpeedMultiplier: number = 3;
-
-    useEffect(() => {
-
-        //Récupération des paths des graines de café de la navigation vertical
-        for (let index = 1; index <= 3; index++) {
-            sidebarSeeds.push(document.getElementById('seed-' + index))
-        }
-
-        setPath(coffeePathRef.current.childNodes.item(0) as SVGPathElement)
-        // setSoundsPath(soundCpsRef.current.lastChild.firstChild.childNodes as NodeListOf<SVGPathElement>)
-
-        if (path) {
-
-            //Initialisation du path de la ligne de café qui traverse la page
-            setPathLengt(path.getTotalLength())
-            path.style.strokeDasharray = pathLenght + ' ' + pathLenght
-            path.style.strokeDashoffset = pathLenght + ""
-        }
-
-    })
-
 
     document.addEventListener('scroll', () => {
-
-        let scrollPercentage = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-        let drawLength = pathLenght * scrollPercentage * drawSpeedMultiplier;
-
-        if (path)
-            path.style.strokeDashoffset = (pathLenght - drawLength) + "";
-
-        // if (soundsPath) {
-        //     let color = window.scrollY > 30 ? "black" : "white"
-        //     soundsPath.forEach((element) => { element.style.stroke = color })
-        // }
 
         parallaxEffect()
         rotateFrame()
@@ -162,20 +119,16 @@ const Coffee = () => {
     }
 
     return (
-        
 
             <div className="coffee">
 
                 {/* Ligne de café */}
-                <div className="line-container">
-                    <CoffeePath ref={coffeePathRef} />
-                </div>
+                <CoffeeLine/>
 
                 <TademaNavbar />
-
                 <SeedBar  position={[{start:0, end: 300}, {start:300, end: 580}, {start:580, end: 800}, {start:800, end: Number.MAX_VALUE}]}/>
 
-                <SoundCps innerRef={soundCpsRef} src={['assets/sounds/mixkit-birds-in-the-forest-1240.wav']} />
+                <SoundCps src={['/Link_Click_Season_2_Opening_FullVORTEXby_JAWS.mp3']} />
 
                 {/* ________________________ */}
 
@@ -192,9 +145,6 @@ const Coffee = () => {
                     <button>Découvrire nos gammes</button>
                 </section>
 
-                {/* <section ref={btnGammeRef} id="discover-gamme">
-                    <button>Découvrire nos gammes</button>
-                </section> */}
 
                 <section ref={productSectionRef} id='bottom'>
 

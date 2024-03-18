@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.10",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/howler": "^2.2.10",
     "@types/react-howler": "^5.2.2",
     "@types/react-lottie": "^1.2.6",

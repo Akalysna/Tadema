@@ -6,3 +6,4 @@ build/
 out/
 
 src/pages/Coffee/Coffee.tsx
+src/**/*.tsx
