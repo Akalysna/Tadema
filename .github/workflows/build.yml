@@ -4,20 +4,16 @@ on :
     branches: main
   workflow_dispatch: 
     inputs:
-      type:
-        description: 'NPM Version type'
+      version:
+        description: 'NPM version'
         type: string
       deploy:
         description: "Lancer le déploiement" 
-        type: boolean
-      package: 
-        description: "Construire une image"
         type: boolean
   
 jobs:
 
   ci: 
-    if: ${{ github.event.label.name != 'release' }}
     runs-on: ubuntu-latest
     steps: 
     - name: Checkout main branch
@@ -46,21 +42,48 @@ jobs:
         path: ./build
         name: github-pages
 
-
-
-  delivery: 
-    if: github.event.inputs.package == 'true'
-    needs: ["ci"]
+    
+  release:
+    needs: ci 
+    if: github.event.inputs.version != ''
     runs-on: ubuntu-latest
     
-    steps:
+    steps: 
     - name: Checkout main branch
       uses: actions/checkout@v4
       
     - name: Install NodeJs
       uses: actions/setup-node@v4
       with: 
-        node-version: 16.x
+        node-version: 18.x
+        
+    - name: Get Version
+      run: | 
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        VERSION=`npm version ${{ inputs.type }}`
+        echo "VERSION=$VERSION" >> ${GITHUB_ENV}
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      with: 
+        token: ${{ secrets.GITHUB_TOKEN }}
+        delete-branch: true
+        title: Release ${{ env.VERSION }}
+        branch: release/${{ env.VERSION }}
+
+    - name: Merge Pull Request
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: gh pr merge --auto --delete-branch --squash "release/${{ env.VERSION }}"
+ 
+    - name: Create Release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ env.VERSION }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: false
+        prerelease: false
         
     - name: Login to ghcr.io
       run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -68,14 +91,12 @@ jobs:
       #Récupération du SHA du commit pour nommer la version de l'image
     - name: Build and tag image
       run: |
-        COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
         REPOSITORY=${GITHUB_REPOSITORY,,}
-        echo "COMMIT_SHA=$COMMIT_SHA" >> ${GITHUB_ENV}
         echo "REPOSITORY=$REPOSITORY" >> ${GITHUB_ENV}
-        docker build -t ghcr.io/$REPOSITORY:$COMMIT_SHA .
+        docker build -t ghcr.io/$REPOSITORY:${{env.VERSION}} .
 
     - name: Push image to GHCR
-      run: docker push ghcr.io/${{env.REPOSITORY}}:${{ env.COMMIT_SHA }}
+      run: docker push ghcr.io/${{env.REPOSITORY}}:${{env.VERSION}}
 
 
 
@@ -96,48 +117,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-
-  
-  release:
-    needs: ci 
-    if: github.event.inputs.type != ''
-    runs-on: ubuntu-latest
-    steps: 
-    - name: Checkout main branch
-      uses: actions/checkout@v4
-      
-    - name: Install NodeJs
-      uses: actions/setup-node@v4
-      with: 
-        node-version: 18.x
-        
-    - name: NPM Version
-      id: version
-      run: | 
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
-        VERSION=`npm version ${{ inputs.type }}`
-        echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
-      with: 
-        token: ${{ secrets.GITHUB_TOKEN }}
-        delete-branch: true
-        title: Release ${{ steps.version.outputs.VERSION }}
-        branch: release/${{ steps.version.outputs.VERSION }}
-        labels: release
-
-    - name: Merge Pull Request
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: gh pr merge --auto --delete-branch --squash "release/${{ steps.version.outputs.VERSION }}"
- 
-    - name: Create Release
-      uses: ncipollo/release-action@v1
-      with:
-        tag: ${{ steps.version.outputs.VERSION }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        draft: false
-        prerelease: false
