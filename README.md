@@ -1,9 +1,9 @@
-![example workflow](https://github.com/akalysna/tadema/actions/workflows/build.yml/badge.svg?branch=main&event=push)
-[![deployed image](https://img.shields.io/badge/Deployed%20image-ok-brightgreen.svg?style=flat)](https://github.com/Akalysna/Tadema/pkgs/container/tadema)
-
 # Getting Started with Create React App
+![](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![production](https://github.com/akalysna/tadema/actions/workflows/build.yml/badge.svg?branch=main)
+[![pages-build-deployment](https://github.com/Akalysna/Tadema/actions/workflows/pages/pages-build-deployment/badge.svg?branch=gh-pages)](https://github.com/Akalysna/Tadema/actions/workflows/pages/pages-build-deployment)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with ![Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
