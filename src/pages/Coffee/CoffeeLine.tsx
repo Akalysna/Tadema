@@ -1,59 +1,59 @@
 import styled from 'styled-components';
 import { ReactComponent as CoffeePath } from '../../assets/svg/coffee_path.svg'
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Children, useCallback, useEffect, useRef, useState } from 'react';
 
 interface IProps {
-    drawSpeedMultiplier?: number
+    drawSpeedMultiplier?: number, 
+    color?:string
 }
-const CoffeeLine = ({ drawSpeedMultiplier = 3 }: IProps) => {
+const CoffeeLine = ({ drawSpeedMultiplier = 3, color='#6c7631' }: IProps) => {
 
     const [lenght, setLenght] = useState<number>(0)
     const [offset, setOffset] = useState<number>(0)
+    const [isHide, setHide] = useState<boolean>(true)
 
-    let path:SVGPathElement
-
+    let ref = useRef<SVGSVGElement>(null)
+    let path: SVGPathElement
 
     useEffect(() => {
-
-        console.log("MOUNT");
         
-        path =(document.getElementById("path").childNodes.item(0)) as SVGPathElement
-        
+        //Get path and lenght
+        path = (ref.current.childNodes.item(0)) as SVGPathElement
         setLenght(path.getTotalLength())
-       
-        onScroll()
-
-        // updateLenght()
-        window.addEventListener('scroll', onScroll);
         
-        //Lorque le composant est démonté
+        //Init scroll
+        onScroll()
+        
+        //Montage et démontage de l'événement scroll
+        window.addEventListener('scroll', onScroll);
         return () => window.removeEventListener('scroll', onScroll);
         
     }, [])
-
+    
     const onScroll = () => {
-
-        // console.log(path.getTotalLength());
+        setHide(prev => prev && false)
         let totalLength = path.getTotalLength()
         let scrollPercentage = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-        let calcOffset = totalLength - (totalLength * scrollPercentage * drawSpeedMultiplier);
-        setOffset(calcOffset)
-        // setLenght(totalLength)
-        // console.log(calcOffset);
-        console.log(totalLength);
+        setOffset(totalLength - (totalLength * scrollPercentage * drawSpeedMultiplier));
     }
 
 
     return (
-        <CoffeeLineGroup $dashArray={lenght + " " + lenght} $dashOffset={offset.toString()}>
-            <CoffeePath id='path'/>
+        <CoffeeLineGroup $isHide={isHide} >
+            <CoffeePath 
+                ref={ref}
+                strokeDasharray={`${lenght} ${lenght}`} 
+                strokeDashoffset={offset.toString()} 
+                strokeWidth={8}
+                stroke={color}
+            />
         </CoffeeLineGroup>
     )
 }
 
 export default CoffeeLine
 
-const CoffeeLineGroup = styled.div<{ $dashArray: string, $dashOffset: string }>`
+const CoffeeLineGroup = styled.div<{$isHide?:boolean}>`
     display: flex;
     justify-content: flex-start;
     position: fixed;
@@ -68,16 +68,8 @@ const CoffeeLineGroup = styled.div<{ $dashArray: string, $dashOffset: string }>`
     pointer-events: none;
 
     svg {
-        display: inline-block;
+        display: ${props => props.$isHide ? "none": "inline-block"};;
         height: 100%;
         margin-left: 8%;
-
-        path {
-            stroke: #6c7631;
-            stroke-width: 8;
-
-            stroke-dasharray: ${props => props.$dashArray};
-            stroke-dashoffset: ${props => props.$dashOffset};
-        }
     }
 `;

@@ -11,6 +11,7 @@ import CoffeeSidebar from '../../components/CoffeeSidebar/CoffeeSidebar';
 import SoundCps from '../../components/SoundCPS/SoundCPS';
 import SeedBar from '../../components/SeedBar/SeedBar';
 import CoffeeLine from './CoffeeLine';
+import ScrollLine from '../../components/ScrollLine/ScrollLine';
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -120,10 +121,13 @@ const Coffee = () => {
 
     return (
 
-            <div className="coffee">
+            <div className="coffee" >
 
                 {/* Ligne de café */}
                 <CoffeeLine/>
+                {/* <ScrollLine>
+                    <CoffeePath/>
+                </ScrollLine> */}
 
                 <TademaNavbar />
                 <SeedBar  position={[{start:0, end: 300}, {start:300, end: 580}, {start:580, end: 800}, {start:800, end: Number.MAX_VALUE}]}/>
